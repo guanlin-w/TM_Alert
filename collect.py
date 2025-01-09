@@ -1,7 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.ui import Select, WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from config import UserConfig
 import time
 
@@ -9,7 +10,7 @@ import time
 
 # set up the webdriver 
 options= Options()
-#options.add_argument("--headless=new")
+options.add_argument("--headless=new")
 driver = webdriver.Chrome(options=options)
 # TODO add check to ensure that the url is proper
 driver.get(UserConfig.url)
@@ -51,8 +52,14 @@ if select is not None:
 
         
 
-
-
-# with open("temp.txt", "w", encoding="utf-8") as f:
-#     f.write(driver.page_source)
-#driver.close()
+# Collect all of the entries
+currentSeats = []
+ticketList = WebDriverWait(driver,10).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR,f"li[role={UserConfig.ticketEntryRole}]")))
+for ticketEntry in ticketList:
+    price = ticketEntry.get_attribute("data-price")
+    seat = None
+    if price is not None:
+        span  = ticketEntry.find_element(By.CSS_SELECTOR, "span")
+        seat = span.text
+        currentSeats.append((seat,price))
+print(currentSeats)
