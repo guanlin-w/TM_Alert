@@ -15,7 +15,6 @@ class DataCollector:
         self.options = Options()
         self.options.add_argument("--headless=new")
         self.driver = webdriver.Chrome(options=self.options)
-        
         self.config = config
         self.driver.set_page_load_timeout(self.config.timeout)
 
@@ -33,7 +32,7 @@ class DataCollector:
     # remove intro popup
     def popup(self):
         try:
-            popupButton = WebDriverWait(self.driver, self.config.timeout).until(EC.element_to_be_clickable((By.CSS_SELECTOR, f"button[{self.config.popupButtonAttr}={self.config.popupButtonValue}]")))
+            popupButton = WebDriverWait(self.driver, 15).until(EC.element_to_be_clickable((By.CSS_SELECTOR, f"button[{self.config.popupButtonAttr}={self.config.popupButtonValue}]")))
             popupButton.click()
             self.popup = True
             print("Popup detected and successfully removed")
