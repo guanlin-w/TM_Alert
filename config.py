@@ -29,5 +29,8 @@ class UserConfig(CommonConfig):
     ticketDesiredAmountFilter = "1 Ticket" if ticketDesiredAmount == 1 else f"{ticketDesiredAmount} Tickets"
 
 
-
-    
+class CustomUserConfig(CommonConfig):
+    def __init__(self,requestedURL,tickets):
+        self.url = requestedURL
+        self.ticketDesiredAmount = tickets
+        self.ticketDesiredAmountFilter = "1 Ticket" if self.ticketDesiredAmount == 1 else f"{self.ticketDesiredAmount} Tickets"

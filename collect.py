@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select, WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
-from config import UserConfig
+from config import UserConfig,CustomUserConfig
 import time
 
 
@@ -87,11 +87,18 @@ class DataCollector:
     
     # main entrypoint to the collection process
     def run(self):
-        self.connect()
-        self.popup()
-        self.filter()
-        self.collect()
-        print(self.outputBuffer)
+        try:
+            self.connect()
+            self.popup()
+            self.filter()
+            self.collect()
+            print(self.outputBuffer)
+        except:
+            # unable to finish the collection process
+            print("Error: The DataCollector is unable to collect the tickets")
+        finally:
+            self.driver.close()
+        
 
 if __name__ =='__main__':
     collector = DataCollector(UserConfig)
